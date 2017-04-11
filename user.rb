@@ -1,10 +1,12 @@
 require_relative 'question_database'
+require_relative 'questions'
+require_relative 'reply'
 
 class Users
   attr_accessor :id, :fname, :lname
 
   def self.find_by_id(id)
-    user = QuestionDatabase.instance.execute(<<-SQL, id)
+    user = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
         *
       FROM
@@ -22,24 +24,24 @@ class Users
   end
 
   def self.find_by_name(fname, lname)
-    user = QuestionDatabase.instance.execute(<<-SQL, fname, lname)
+    user = QuestionsDatabase.instance.execute(<<-SQL, fname, lname)
       SELECT
         *
       FROM
         users
       WHERE
-        fname, lname = ?, ?
+        fname = ? AND lname = ?
     SQL
     return nil unless user.length > 0
 
     Users.new(user.first)
   end
 
-  def authored_questions(id)
-    Questions.find_by_author_id(id)
+  def authored_questions
+    Questions.find_by_author_id(@id)
   end
 
-  def authored_replies(id)
-    Replies.find_by_user_id(id)
+  def authored_replies
+    Replies.find_by_user_id(@id)
   end
 end

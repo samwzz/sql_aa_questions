@@ -4,7 +4,7 @@ class QuestionLikes
   attr_accessor :id, :user_id, :question_id
 
   def self.find_by_id(id)
-    like = QuestionDatabase.instance.execute(<<-SQL, id)
+    like = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
         *
       FROM

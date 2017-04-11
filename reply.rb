@@ -1,10 +1,12 @@
 require_relative 'question_database'
+require_relative 'user'
+require_relative 'questions'
 
 class Replies
   attr_accessor :id, :question_id, :user_id, :body, :reply_id
 
   def self.find_by_id(id)
-    reply = QuestionDatabase.instance.execute(<<-SQL, id)
+    reply = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
         *
       FROM
@@ -23,7 +25,7 @@ class Replies
   end
 
   def self.find_by_user_id(user_id)
-    replies = QuestionDatabase.instance.execute(<<-SQL, user_id)
+    replies = QuestionsDatabase.instance.execute(<<-SQL, user_id)
       SELECT
         *
       FROM
@@ -37,7 +39,7 @@ class Replies
   end
 
   def self.find_by_question_id(question_id)
-    replies = QuestionDatabase.instance.execute(<<-SQL, question_id)
+    replies = QuestionsDatabase.instance.execute(<<-SQL, question_id)
       SELECT
         *
       FROM
@@ -48,5 +50,23 @@ class Replies
     retunr nil unless replies.length > 0
 
     replies.map { |reply| Replies.new(reply) }
+  end
+
+  def author
+    author = Users.find_by_id(@user_id)
+  end
+
+  def question
+    Questions.find_by_id(@question_id)
+  end
+
+  def parent_reply
+    replies = Replies.find_by_question_id(@question_id)
+    replies.select { |reply| reply.reply_id.nil? }
+  end
+
+  def child_replies
+    replies = Replies.find_by_question_id(@question_id)
+    replies.reject { |reply| reply.reply_id.nil? }
   end
 end

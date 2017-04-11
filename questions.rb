@@ -1,4 +1,5 @@
 require_relative 'question_database'
+require_relative 'user'
 
 class Questions
   attr_accessor :id, :title, :body, :author_id
@@ -23,7 +24,7 @@ class Questions
   end
 
   def self.find_by_author_id(author_id)
-    questions = QuestionDatabase.instance.execute(<<-SQL, author_id)
+    questions = QuestionsDatabase.instance.execute(<<-SQL, author_id)
       SELECT
         *
       FROM
@@ -34,5 +35,13 @@ class Questions
     return nil unless questions.length > 0
 
     questions.map { |question| Questions.new(question) }
+  end
+
+  def author
+    author = Users.find_by_id(@author_id)
+  end
+
+  def replies
+    Replies.find_by_question_id(@id)
   end
 end

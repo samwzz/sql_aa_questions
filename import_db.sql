@@ -53,28 +53,43 @@ INSERT INTO
   users(fname, lname)
 VALUES
   ('Sam', 'Wang'),
-  ('Sean', 'Perfecto');
+  ('Sean', 'Perfecto'),
+  ('Donald', 'Duck'),
+  ('Barack', 'Obama');
 
 INSERT INTO
   questions(title, body, author_id)
 VALUES
-  ('Hi', 'Hi Sam', 2),
-  ('Yo', 'Yo Sean', 1);
+  ('Life', 'What is the answer to life?', 1),
+  ('Death', 'What is after death?', 2),
+  ('Help', 'Where is Mickey? I cannot find him.', 3),
+  ('Vacation', 'Where is the best place to vacation?', 4);
 
 INSERT INTO
   question_follows(user_id, question_id)
 VALUES
   (1,2),
-  (2,1);
+  (2,1),
+  (1,3),
+  (4,1),
+  (3,4);
 
 INSERT INTO
-  replies(question_id, user_id, body)
+  replies(question_id, user_id, body, reply_id)
 VALUES
-  (1, 1, 'Replied'),
-  (2, 2, 'Also Replied');
+  (1, 3, 'I am duck. Why would I know', NULL),
+  (1, 1, 'I like ducks, mmm tasty.', 1),
+  (2, 4, 'America', NULL),
+  (2, 2, 'So you saying I am dead already Barack?', 3),
+  (3, 1, 'Mickey is in Disneyland ya dumb duck', NULL),
+  (4, 3, 'Quack', NULL);
 
 INSERT INTO
   question_likes(user_id, question_id)
 VALUES
   (1, 1),
-  (2, 2);
+  (2, 2),
+  (3, 2),
+  (4, 2),
+  (1, 2),
+  (3, 4);
