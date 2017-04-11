@@ -1,5 +1,6 @@
 require_relative 'question_database'
 require_relative 'user'
+require_relative 'question_follows'
 
 class Questions
   attr_accessor :id, :title, :body, :author_id
@@ -43,5 +44,9 @@ class Questions
 
   def replies
     Replies.find_by_question_id(@id)
+  end
+
+  def followers
+    QuestionFollows.followers_for_question_id(@id)
   end
 end
