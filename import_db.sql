@@ -63,7 +63,8 @@ VALUES
   ('Life', 'What is the answer to life?', 1),
   ('Death', 'What is after death?', 2),
   ('Help', 'Where is Mickey? I cannot find him.', 3),
-  ('Vacation', 'Where is the best place to vacation?', 4);
+  ('Vacation', 'Where is the best place to vacation?', 4),
+  ('New', 'Hi, how do I not fail App Academy?', 2);
 
 INSERT INTO
   question_follows(user_id, question_id)

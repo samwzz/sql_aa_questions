@@ -5,6 +5,11 @@ require_relative 'questions'
 class Replies
   attr_accessor :id, :question_id, :user_id, :body, :reply_id
 
+  def self.all
+   data = QuestionsDatabase.instance.execute("SELECT * FROM replies")
+   data.map { |datum| Replies.new(datum) }
+  end
+
   def self.find_by_id(id)
     reply = QuestionsDatabase.instance.execute(<<-SQL, id)
       SELECT
@@ -68,5 +73,33 @@ class Replies
   def child_replies
     replies = Replies.find_by_question_id(@question_id)
     replies.reject { |reply| reply.reply_id.nil? }
+  end
+
+  def save
+    @id.nil? ? self.create : self.update
+  end
+
+  def create
+    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @user_id, @body, @reply_id)
+      INSERT INTO
+        replies (question_id, user_id, body, reply_id)
+      VALUES
+        (?, ?, ?, ?)
+    SQL
+      @id = QuestionsDatabase.instance.last_insert_row_id
+  end
+
+  def update
+    QuestionsDatabase.instance.execute(<<-SQL, @question_id, @user_id, @body, @reply_id, @id)
+      UPDATE
+        replies
+      SET
+        question_id = ?
+        user_id = ?
+        body = ?
+        reply_id = ?
+      WHERE
+        id = ?
+    SQL
   end
 end
