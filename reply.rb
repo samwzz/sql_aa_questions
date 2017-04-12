@@ -1,28 +1,29 @@
 require_relative 'question_database'
 require_relative 'user'
 require_relative 'questions'
+require_relative 'modelbase'
 
-class Replies
+class Replies < Model
   attr_accessor :id, :question_id, :user_id, :body, :reply_id
 
-  def self.all
-   data = QuestionsDatabase.instance.execute("SELECT * FROM replies")
-   data.map { |datum| Replies.new(datum) }
-  end
-
-  def self.find_by_id(id)
-    reply = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        replies
-      WHERE
-        id = ?
-    SQL
-    return nil unless reply.length > 0
-
-    Replies.new(reply.first)
-  end
+  # def self.all
+  #  data = QuestionsDatabase.instance.execute("SELECT * FROM replies")
+  #  data.map { |datum| Replies.new(datum) }
+  # end
+  #
+  # def self.find_by_id(id)
+  #   reply = QuestionsDatabase.instance.execute(<<-SQL, id)
+  #     SELECT
+  #       *
+  #     FROM
+  #       replies
+  #     WHERE
+  #       id = ?
+  #   SQL
+  #   return nil unless reply.length > 0
+  #
+  #   Replies.new(reply.first)
+  # end
 
   def initialize(options)
     @id, @question_id, @user_id, @body, @reply_id =

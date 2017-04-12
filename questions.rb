@@ -2,28 +2,29 @@ require_relative 'question_database'
 require_relative 'user'
 require_relative 'question_follows'
 require_relative 'question_likes'
+require_relative 'modelbase'
 
-class Questions
+class Questions < Model
   attr_accessor :id, :title, :body, :author_id
 
-  def self.all
-   data = QuestionsDatabase.instance.execute("SELECT * FROM questions")
-   data.map { |datum| Questions.new(datum) }
-  end
-
-  def self.find_by_id(id)
-    question = QuestionsDatabase.instance.execute(<<-SQL, id)
-      SELECT
-        *
-      FROM
-        questions
-      WHERE
-        id = ?
-    SQL
-    return nil unless question.length > 0
-
-    Questions.new(question.first)
-  end
+  # def self.all
+  #  data = QuestionsDatabase.instance.execute("SELECT * FROM questions")
+  #  data.map { |datum| Questions.new(datum) }
+  # end
+  #
+  # def self.find_by_id(id)
+  #   question = QuestionsDatabase.instance.execute(<<-SQL, id)
+  #     SELECT
+  #       *
+  #     FROM
+  #       questions
+  #     WHERE
+  #       id = ?
+  #   SQL
+  #   return nil unless question.length > 0
+  #
+  #   Questions.new(question.first)
+  # end
 
   def initialize(options)
     @id, @title, @body, @author_id = options.values_at("id", "title",

@@ -2,6 +2,7 @@ require_relative 'question_database'
 require_relative 'user'
 require_relative 'questions'
 
+
 class QuestionLikes
   attr_accessor :id, :user_id, :question_id
 
